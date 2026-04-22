@@ -1,0 +1,158 @@
+:root {
+  color-scheme: dark;
+  --bg: #0f1226;
+  --panel: #161b36;
+  --accent: #ffcc00;
+  --text: #f5f7ff;
+  --muted: #bcc3e0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(circle at top, #1d2550 0%, var(--bg) 55%);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.app-shell {
+  width: min(980px, 100%);
+  background: color-mix(in oklab, var(--panel), black 8%);
+  border: 1px solid color-mix(in oklab, var(--muted), transparent 75%);
+  border-radius: 1rem;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: clamp(1.6rem, 4.8vw, 2.5rem);
+}
+
+.app-header p {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.game-panel {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+}
+
+.wheel-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 640px;
+  margin-inline: auto;
+  border-radius: 50%;
+  padding: 0.4rem;
+  background: linear-gradient(145deg, #2a336c, #0f1433);
+}
+
+#wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+
+.pointer {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-top: 34px solid var(--accent);
+  filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.4));
+  z-index: 5;
+}
+
+.controls {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field-label {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.mode-select {
+  border: 1px solid color-mix(in oklab, var(--muted), transparent 70%);
+  background: #0f1433;
+  color: var(--text);
+  border-radius: 0.7rem;
+  padding: 0.72rem 0.8rem;
+  font-size: 0.96rem;
+  font-weight: 600;
+  width: 100%;
+}
+
+button {
+  border: 0;
+  border-radius: 0.7rem;
+  padding: 0.82rem 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.spin-button {
+  background: linear-gradient(90deg, #f7b801, #ffc93d);
+  color: #1d1f2f;
+}
+
+.reset-button {
+  background: linear-gradient(90deg, #2bb6cf, #45d2eb);
+  color: #07222a;
+}
+
+button:disabled,
+.mode-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#result {
+  margin: 0;
+  min-height: 3.3em;
+  border: 1px dashed color-mix(in oklab, var(--muted), transparent 65%);
+  border-radius: 0.65rem;
+  padding: 0.75rem;
+  color: var(--text);
+  background: color-mix(in oklab, #0f1226, transparent 10%);
+  line-height: 1.4;
+}
+
+@media (max-width: 860px) {
+  .game-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .field-label,
+  .mode-select,
+  #result {
+    grid-column: 1 / -1;
+  }
+}
