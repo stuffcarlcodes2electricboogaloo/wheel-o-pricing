@@ -3,6 +3,7 @@ const ctx = canvas.getContext('2d');
 const spinButton = document.getElementById('spinButton');
 const resetButton = document.getElementById('resetButton');
 const pricingMode = document.getElementById('pricingMode');
+const themeAudioInput = document.getElementById('themeAudio');
 const result = document.getElementById('result');
 
 const SEGMENT_COUNT = 12;
@@ -17,6 +18,8 @@ let wheelValues = [];
 let rotation = 0;
 let spinning = false;
 let selectedMode = pricingMode.value;
+let spinThemeAudio = null;
+let spinThemeUrl = null;
 
 const palette = [
   '#63b3ff',
@@ -114,16 +117,41 @@ function setControlsDisabled(disabled) {
   spinButton.disabled = disabled;
   resetButton.disabled = disabled;
   pricingMode.disabled = disabled;
+  themeAudioInput.disabled = disabled;
 }
 
 function modeLabel() {
   return getSelectedRange().label;
 }
 
+function stopSpinTheme() {
+  if (!spinThemeAudio) {
+    return;
+  }
+
+  spinThemeAudio.pause();
+  spinThemeAudio.currentTime = 0;
+}
+
+async function playSpinTheme() {
+  if (!spinThemeAudio) {
+    return;
+  }
+
+  spinThemeAudio.currentTime = 0;
+
+  try {
+    await spinThemeAudio.play();
+  } catch {
+    result.textContent = 'Spin started. Audio playback was blocked by browser autoplay policy.';
+  }
+}
+
 function animateSpin() {
   spinning = true;
   setControlsDisabled(true);
   result.textContent = `Spinning ${modeLabel()} wheel...`;
+  playSpinTheme();
 
   const start = performance.now();
   const duration = randomInt(4200, 6200);
@@ -146,6 +174,7 @@ function animateSpin() {
 
     spinning = false;
     setControlsDisabled(false);
+    stopSpinTheme();
 
     const index = winningIndex();
     result.textContent = `${modeLabel()} result: ${formatCurrency(wheelValues[index])}.`;
@@ -160,6 +189,22 @@ function regenerateForSelectedMode() {
   drawWheel();
   const range = getSelectedRange();
   result.textContent = `${range.label} mode active (${formatCurrency(range.min)} to ${formatCurrency(range.max)}). Spin when ready!`;
+}
+
+function updateThemeAudio(file) {
+  if (spinThemeUrl) {
+    URL.revokeObjectURL(spinThemeUrl);
+    spinThemeUrl = null;
+  }
+
+  if (!file) {
+    spinThemeAudio = null;
+    return;
+  }
+
+  spinThemeUrl = URL.createObjectURL(file);
+  spinThemeAudio = new Audio(spinThemeUrl);
+  spinThemeAudio.loop = true;
 }
 
 spinButton.addEventListener('click', () => {
@@ -181,6 +226,17 @@ pricingMode.addEventListener('change', (event) => {
 
   selectedMode = event.target.value;
   regenerateForSelectedMode();
+});
+
+themeAudioInput.addEventListener('change', (event) => {
+  const [file] = event.target.files;
+  updateThemeAudio(file);
+
+  if (file) {
+    result.textContent = `Theme audio loaded (${file.name}). Spin to hear it.`;
+  } else {
+    result.textContent = 'Theme audio cleared. Spin uses no custom audio.';
+  }
 });
 
 window.addEventListener('resize', resizeCanvas);

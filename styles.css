@@ -93,15 +93,35 @@ body {
   font-weight: 600;
 }
 
-.mode-select {
+.mode-select,
+.audio-input {
   border: 1px solid color-mix(in oklab, var(--muted), transparent 70%);
   background: #0f1433;
   color: var(--text);
   border-radius: 0.7rem;
+  width: 100%;
+}
+
+.mode-select {
   padding: 0.72rem 0.8rem;
   font-size: 0.96rem;
   font-weight: 600;
-  width: 100%;
+}
+
+.audio-input {
+  padding: 0.55rem 0.65rem;
+  font-size: 0.9rem;
+}
+
+.audio-input::file-selector-button {
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  margin-right: 0.6rem;
+  font-weight: 700;
+  background: #2c3a7a;
+  color: #ebefff;
+  cursor: pointer;
 }
 
 button {
@@ -124,7 +144,8 @@ button {
 }
 
 button:disabled,
-.mode-select:disabled {
+.mode-select:disabled,
+.audio-input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -152,6 +173,7 @@ button:disabled,
 
   .field-label,
   .mode-select,
+  .audio-input,
   #result {
     grid-column: 1 / -1;
   }

@@ -19,3 +19,7 @@ python -m http.server 8080
 ```
 
 Then visit `http://localhost:8080`.
+
+## Optional Spin Theme Audio
+
+You can upload your own licensed audio file in the app. If loaded, it loops while the wheel spins and stops when the spin ends.
