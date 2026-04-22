@@ -10,7 +10,7 @@
     <main class="app-shell">
       <header class="app-header">
         <h1>Wheel-o-Pricing</h1>
-        <p>Pick a pricing tier, then spin to reveal a randomized value in that category's range.</p>
+        <p>Spin to reveal a randomly distributed price between $11,000 and $1,000,000.</p>
       </header>
 
       <section class="game-panel" aria-label="Wheel-o-Pricing game board">
@@ -20,16 +20,9 @@
         </div>
 
         <div class="controls">
-          <label class="field-label" for="pricingMode">Pricing category</label>
-          <select id="pricingMode" class="mode-select" aria-label="Select pricing category">
-            <option value="corporate">Corporate ($11,000–$200,000)</option>
-            <option value="enterprise">Enterprise ($200,001–$500,000)</option>
-            <option value="strategic">Strategic ($500,001–$1,000,000)</option>
-          </select>
-
           <button id="spinButton" class="spin-button" type="button">Spin the Wheel</button>
           <button id="resetButton" class="reset-button" type="button">Generate New Wheel</button>
-          <p id="result" role="status" aria-live="polite">Select a category and press “Spin the Wheel” to play.</p>
+          <p id="result" role="status" aria-live="polite">Press “Spin the Wheel” to play.</p>
         </div>
       </section>
     </main>

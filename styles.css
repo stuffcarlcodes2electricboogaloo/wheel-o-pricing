@@ -3,6 +3,7 @@
   --bg: #0f1226;
   --panel: #161b36;
   --accent: #ffcc00;
+  --accent-2: #66d9ef;
   --text: #f5f7ff;
   --muted: #bcc3e0;
 }
@@ -87,23 +88,6 @@ body {
   gap: 0.85rem;
 }
 
-.field-label {
-  color: var(--muted);
-  font-size: 0.92rem;
-  font-weight: 600;
-}
-
-.mode-select {
-  border: 1px solid color-mix(in oklab, var(--muted), transparent 70%);
-  background: #0f1433;
-  color: var(--text);
-  border-radius: 0.7rem;
-  padding: 0.72rem 0.8rem;
-  font-size: 0.96rem;
-  font-weight: 600;
-  width: 100%;
-}
-
 button {
   border: 0;
   border-radius: 0.7rem;
@@ -123,8 +107,7 @@ button {
   color: #07222a;
 }
 
-button:disabled,
-.mode-select:disabled {
+button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -150,8 +133,6 @@ button:disabled,
     align-items: start;
   }
 
-  .field-label,
-  .mode-select,
   #result {
     grid-column: 1 / -1;
   }
