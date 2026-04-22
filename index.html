@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wheel-o-Pricing</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <h1>Wheel-o-Pricing</h1>
+        <p>Pick a pricing tier, then spin to reveal a randomized value in that category's range.</p>
+      </header>
+
+      <section class="game-panel" aria-label="Wheel-o-Pricing game board">
+        <div class="wheel-wrapper">
+          <div class="pointer" aria-hidden="true"></div>
+          <canvas id="wheel" aria-label="Spinning price wheel"></canvas>
+        </div>
+
+        <div class="controls">
+          <label class="field-label" for="pricingMode">Pricing category</label>
+          <select id="pricingMode" class="mode-select" aria-label="Select pricing category">
+            <option value="corporate">Corporate ($11,000–$200,000)</option>
+            <option value="enterprise">Enterprise ($200,001–$500,000)</option>
+            <option value="strategic">Strategic ($500,001–$1,000,000)</option>
+          </select>
+
+          <label class="field-label" for="themeAudio">Spin theme audio (optional, licensed by you)</label>
+          <input id="themeAudio" class="audio-input" type="file" accept="audio/*" />
+
+          <button id="spinButton" class="spin-button" type="button">Spin the Wheel</button>
+          <button id="resetButton" class="reset-button" type="button">Generate New Wheel</button>
+          <p id="result" role="status" aria-live="polite">Select a category and press “Spin the Wheel” to play.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
