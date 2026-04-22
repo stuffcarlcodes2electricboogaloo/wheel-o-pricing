@@ -2,15 +2,21 @@ const canvas = document.getElementById('wheel');
 const ctx = canvas.getContext('2d');
 const spinButton = document.getElementById('spinButton');
 const resetButton = document.getElementById('resetButton');
+const pricingMode = document.getElementById('pricingMode');
 const result = document.getElementById('result');
 
 const SEGMENT_COUNT = 12;
-const MIN_VALUE = 11_000;
-const MAX_VALUE = 1_000_000;
+
+const PRICING_RANGES = {
+  corporate: { label: 'Corporate', min: 11_000, max: 200_000 },
+  enterprise: { label: 'Enterprise', min: 200_001, max: 500_000 },
+  strategic: { label: 'Strategic', min: 500_001, max: 1_000_000 },
+};
 
 let wheelValues = [];
 let rotation = 0;
 let spinning = false;
+let selectedMode = pricingMode.value;
 
 const palette = [
   '#63b3ff',
@@ -40,16 +46,21 @@ function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function generateWheelValues() {
-  wheelValues = Array.from({ length: SEGMENT_COUNT }, () => randomInt(MIN_VALUE, MAX_VALUE));
-}
-
 function formatCurrency(value) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 0,
   }).format(value);
+}
+
+function getSelectedRange() {
+  return PRICING_RANGES[selectedMode];
+}
+
+function generateWheelValues() {
+  const range = getSelectedRange();
+  wheelValues = Array.from({ length: SEGMENT_COUNT }, () => randomInt(range.min, range.max));
 }
 
 function drawWheel() {
@@ -99,11 +110,20 @@ function winningIndex() {
   return Math.floor(normalized / arc) % SEGMENT_COUNT;
 }
 
+function setControlsDisabled(disabled) {
+  spinButton.disabled = disabled;
+  resetButton.disabled = disabled;
+  pricingMode.disabled = disabled;
+}
+
+function modeLabel() {
+  return getSelectedRange().label;
+}
+
 function animateSpin() {
   spinning = true;
-  spinButton.disabled = true;
-  resetButton.disabled = true;
-  result.textContent = 'Spinning...';
+  setControlsDisabled(true);
+  result.textContent = `Spinning ${modeLabel()} wheel...`;
 
   const start = performance.now();
   const duration = randomInt(4200, 6200);
@@ -125,14 +145,21 @@ function animateSpin() {
     }
 
     spinning = false;
-    spinButton.disabled = false;
-    resetButton.disabled = false;
+    setControlsDisabled(false);
 
     const index = winningIndex();
-    result.textContent = `You landed on ${formatCurrency(wheelValues[index])}.`;
+    result.textContent = `${modeLabel()} result: ${formatCurrency(wheelValues[index])}.`;
   }
 
   requestAnimationFrame(tick);
+}
+
+function regenerateForSelectedMode() {
+  rotation = 0;
+  generateWheelValues();
+  drawWheel();
+  const range = getSelectedRange();
+  result.textContent = `${range.label} mode active (${formatCurrency(range.min)} to ${formatCurrency(range.max)}). Spin when ready!`;
 }
 
 spinButton.addEventListener('click', () => {
@@ -142,17 +169,21 @@ spinButton.addEventListener('click', () => {
 });
 
 resetButton.addEventListener('click', () => {
+  if (!spinning) {
+    regenerateForSelectedMode();
+  }
+});
+
+pricingMode.addEventListener('change', (event) => {
   if (spinning) {
     return;
   }
 
-  rotation = 0;
-  generateWheelValues();
-  drawWheel();
-  result.textContent = 'New random wheel generated. Spin when ready!';
+  selectedMode = event.target.value;
+  regenerateForSelectedMode();
 });
 
 window.addEventListener('resize', resizeCanvas);
 
-generateWheelValues();
+regenerateForSelectedMode();
 resizeCanvas();
